@@ -18,6 +18,7 @@ with open(CONFIG_PATH, 'r') as f:
 # create dash app
 # -----------------------------
 app = dash.Dash(__name__, title="CSVthis2")
+# automatically loads icon if asstes/favicon.ico is in project folder
 
 # -----------------------------
 # layout for dash app
