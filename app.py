@@ -212,7 +212,7 @@ def download(n_clicks, figure, children):
     except ValueError:
         uploaded_filename = uploaded_file
 
-    download_filename = f'CSVthis2_{uploaded_filename}.html'
+    download_filename = f'{uploaded_filename}_CSVthis2.html'
 
     return dict(content=figure.to_html(), filename=download_filename)
 
