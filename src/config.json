@@ -1,5 +1,5 @@
 {
-  "csv_separator": "\t",
+  "csv_separator": ";",
   "csv_decimal": ".",
   "time_col_name": "Zeit",
   "time_col_format": "%H:%M:%S"

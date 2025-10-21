@@ -2,9 +2,8 @@ import dash
 from dash import dcc, html, Input, Output, State
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from src import handler
+from src import handler, calculation
 import json
-import os
 
 # -----------------------------
 # open config
@@ -18,7 +17,7 @@ with open(CONFIG_PATH, 'r') as f:
 # create dash app
 # -----------------------------
 app = dash.Dash(__name__, title="CSVthis2")
-# automatically loads icon if asstes/favicon.ico is in project folder
+# automatically loads icon if assets/favicon.ico is in project folder
 
 # -----------------------------
 # layout for dash app
@@ -31,7 +30,7 @@ app.layout = html.Div([
             html.Button(
                 "Einstellungen",
                 id='open-config',
-                disabled=True,  # TODO: add functionality to change config.json in GUI someday
+                disabled=True,  # add functionality to change config.json with GUI someday
                 style={'display': 'inline-block'}
             ),
             dcc.Upload(
@@ -104,7 +103,7 @@ def upload_file(contents, filename):
 
     # return in the order of the outputs:
     # stored-data, uploaded-filename
-    return contents, new_label  # only saves base64-string
+    return contents, new_label  # only saves base64-string (in contents)
 
 
 # -----------------------------
@@ -124,10 +123,8 @@ def update_dropdowns(stored_data):
     # stored data from dcc.Upload to dataframe
     df = handler.stored_data_to_df(config, stored_data)
 
-    # everything specific for project Oelek
-    if os.path.exists('oelek/oelek.py'):
-        from oelek import oelek
-        df = oelek.col_for_oelek(df)
+    # add new columns if own calculation exists
+    df = calculation.add_col(df)
 
     options = [{'label': col, 'value': col} for col in df.columns]
 
@@ -155,31 +152,31 @@ def update_graph(top_signals, bottom_signals, stored_data):
     # stored data from dcc.Upload to dataframe
     df = handler.stored_data_to_df(config, stored_data)
 
-    # everything specific for project Oelek
-    if os.path.exists('oelek/oelek.py'):
-        from oelek import oelek
-        df = oelek.calc_for_oelek(df)
+    # add new columns and values if own calculation exists
+    df = calculation.do_calc(df)
 
+    # main plot
     fig = make_subplots(
         rows=2, cols=1, shared_xaxes=True,
         vertical_spacing=0.05,
-        # subplot_titles=('Graph oben', 'Graph unten')
+        # subplot_titles=('top graph', 'bottom graph')
     )
 
-    # top plot
+    # top subplot
     for column_name in top_signals:
         fig.add_trace(
             go.Scatter(x=df.index, y=df[column_name], mode='lines', name=column_name),
             row=1, col=1
         )
 
-    # bottom plot
+    # bottom subplot
     for column_name in bottom_signals:
         fig.add_trace(
             go.Scatter(x=df.index, y=df[column_name], mode='lines', name=column_name),
             row=2, col=1
         )
 
+    # layout
     fig.update_layout(
         legend=dict(x=1.02, y=1, xanchor='left', yanchor='top'),
     )
