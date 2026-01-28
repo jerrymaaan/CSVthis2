@@ -7,7 +7,7 @@ Primarily dedicated to the project Oelek.
 
 Author: Jeremias Friedel
 
-Version: 2.0.3
+Version: 2.0.4
 
 ___
 
