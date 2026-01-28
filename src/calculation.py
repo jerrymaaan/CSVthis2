@@ -14,6 +14,11 @@ def _test_addition(df):
     return res
 
 
+def _test_power(df):
+    res = df['I /A'] * df['E /V']
+    return res
+
+
 def _test_enthalpy(df):
     res = PropsSI('H',
                   'T', df['T1'].to_numpy() + 273.15,  # °C to K
@@ -32,6 +37,7 @@ ADD YOUR COLUMN NAMES HERE
 CALCULATED_COLUMNS = {
     'test_addition': _test_addition,
     'test_enthalpy': _test_enthalpy,
+    'power /w': _test_power,
 }
 
 
