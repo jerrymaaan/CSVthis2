@@ -11,7 +11,7 @@ Version: 2.0.3
 
 ___
 
-## Requirements
+## Dependencies
 
 - ``pandas``
 - ``dash``
@@ -19,10 +19,16 @@ ___
 
 ## How to use
 
-1. Install all requirements.
-2. Start ``app.py``.
-3. Choose your file to be plotted (e.g. ``test_data.csv``). Extension ``.txt`` or no file extension may also work.
-4. Use the dropdown menus to choose which data to display.
+1. Install all required dependencies.
+2. Start the application by running `app.py`.
+3. Adapt `config.json` to match your CSV file structure.
+   For supported time formats, see the Python documentation
+   [here](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior).
+   If the time column contains only a sequential number (e.g. `1, 2, 3, ...`),
+   set the time format to `null`.
+4. Select the file you want to plot (e.g. `test_data.csv`).
+   Files with the extension `.txt` or without any file extension may also work.
+5. Use the dropdown menus to choose which data should be displayed.
 
 ## Own calculations
 

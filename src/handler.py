@@ -12,9 +12,10 @@ def stored_data_to_df(config, stored_data):
                      decimal=config['csv_decimal']
                      )
 
-    # changes time colum to datetime format and set as index
-    col = config['time_col_name']
-    df[col] = pd.to_datetime(df[col], format=config['time_col_format'])
-    df = df.set_index(col)
+    # changes time colum to datetime format if it has one and set as index
+    x_col = config['time_col_name']
+    if config['time_col_format'] is not None:
+        df[x_col] = pd.to_datetime(df[x_col], format=config['time_col_format'])
+    df = df.set_index(x_col)
 
     return df
